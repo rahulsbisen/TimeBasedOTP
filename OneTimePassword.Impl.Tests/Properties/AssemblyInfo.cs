@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OneTimePassword.Impl.Test")]
+[assembly: AssemblyTitle("OneTimePassword.Impl.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("OneTimePassword.Impl.Test")]
+[assembly: AssemblyProduct("OneTimePassword.Impl.Tests")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("bfcdf241-cb85-4cb3-9d26-b0f2b32934e6")]
+[assembly: Guid("c5f9bf7a-6107-4a6d-9a97-9df804bbe169")]
 
 // Version information for an assembly consists of the following four values:
 //
