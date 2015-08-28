@@ -5,10 +5,10 @@ namespace OneTimePassword.Contract.Response
 {
     public class BaseResponse
     {
-        public List<Error> Errors;
+        public OTPError Error { get; set; }
     }
 
-    public class Error
+    public class OTPError
     {
         public String Code { get; set; }
         public String Description { get; set; }
