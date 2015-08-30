@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Time Based OTP Authenticator</title>
+</head>
+<body>
+<div>
+    <p>Generate OTP:</p>
+    <form method="post" name="GenerateOTP">
+        <label>UserId: </label>
+        <input type="text" name="userId" id="generate_userId"/>
+        <input type="submit" value="Generate" id="submit_generateOtp"/>
+    </form>
+</div>
+
+@if (@Model != null)
+{
+    if (@Model.Error != null)
+    {
+        <div id="error">
+            <p>
+                <b>Error:</b>
+            </p>
+            <p id="error_description">@Model.Error.Description</p>
+        </div>
+    }
+    else
+    {
+        <div id="result">
+            <p>
+                <b>Generated OTP:</b>
+            </p>
+            <p id="otp_result">@Model.OTP</p>
+        </div>
+    }
+}
+<br/>
+<br/>
+<a href="/">Go Back</a>
+</body>
+</html>

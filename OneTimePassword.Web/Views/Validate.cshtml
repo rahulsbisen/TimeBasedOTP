@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Time Based OTP Authenticator</title>
+</head>
+<body>
+
+<div>
+    <p>Validate OTP:</p>
+    <form method="post" name="ValidateOTP">
+        <label>UserId: </label>
+        <input type="text" name="userId" id="validate_userId"/>
+        <br/>
+        <label>OTP: </label>
+        <input type="text" name="otp" id="validate_otp"/>
+        <br/><br/>
+        <input type="submit" value="Validate" id="submit_validateOtp"/>
+    </form>
+</div>
+@if (@Model != null)
+{
+    if (@Model.Error != null)
+    {
+        <div id="error">
+            <p>
+                <b>Error:</b>
+            </p>
+            <p id="error_description">@Model.Error.Description</p>
+        </div>
+    }
+    else
+    {
+        <div id="result">
+            if (@Model.Success)
+            {
+            <p>
+                <b>Authentication Success.</b>
+            </p>
+            }
+            else
+            {
+            <p>
+                <b>Authentication Failed.</b>
+            </p>
+            }
+        </div>
+    }
+}
+<br/>
+<br/>
+<a href="/">Go Back</a>
+</body>
+</html>

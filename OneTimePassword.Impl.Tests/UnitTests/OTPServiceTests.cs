@@ -214,7 +214,6 @@ namespace OneTimePassword.Impl.Tests.UnitTests
         public void ShouldReturnErrorIfArgumentExceptionIsThrownByAlgorithmForGenerateOTPRequest()
         {
             var userId = Guid.NewGuid().ToString();
-            var generatedOtp = "321382113asjd72131";
 
             var generateOtpRequest = new GenerateOTPRequest
             {
