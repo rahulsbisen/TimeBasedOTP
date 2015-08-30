@@ -10,11 +10,11 @@ namespace OneTimePassword.Impl
             if (lhs == null || rhs == null)
                 return false;
 
-            uint diff = (uint)lhs.Length ^ (uint)rhs.Length;
+            uint diff = (uint) lhs.Length ^ (uint) rhs.Length;
 
             for (int i = 0; i < lhs.Length && i < rhs.Length; i++)
             {
-                diff |= (uint)lhs[i] ^ (uint)rhs[i];
+                diff |= lhs[i] ^ (uint) rhs[i];
             }
 
             return diff == 0;

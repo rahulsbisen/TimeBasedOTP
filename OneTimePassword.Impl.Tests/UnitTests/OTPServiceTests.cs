@@ -19,7 +19,7 @@ namespace OneTimePassword.Impl.Tests.UnitTests
             errorFactory = MockRepository.GenerateMock<IErrorFactory>();
             otpConfiguration = new OTPConfiguration()
             {
-                IntervalSeconds = 31,
+                OTPExpiryInSeconds = 31,
                 NumberOfDigitsInOTP = 6,
                 PrivateKey = "as9121jd623ms23h232k3"
             };

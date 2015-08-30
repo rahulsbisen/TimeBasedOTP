@@ -15,7 +15,8 @@ namespace OneTimePassword.Impl.Tests.UnitTests
         [Test()]
         public void ShouldReturnTrueForSameUnicodeString()
         {
-            Assert.That(StringUtilities.StringEqualsInConstantTime("rahulsbisen@gmail.com", "rahulsbisen@gmail.com"), Is.True);
+            Assert.That(StringUtilities.StringEqualsInConstantTime("rahulsbisen@gmail.com", "rahulsbisen@gmail.com"),
+                Is.True);
         }
 
         [Test()]

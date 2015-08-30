@@ -10,9 +10,9 @@ namespace OneTimePassword.Impl.Tests.UnitTests
         public void ShouldGetInvalidRequestError()
         {
             var invalidRequestError = new ErrorFactory().GetInvalidRequestError();
-            Assert.That(invalidRequestError,Is.Not.Null);
-            Assert.That(invalidRequestError.Code,Is.EqualTo("InvalidRequest"));
-            Assert.That(invalidRequestError.Description,Is.EqualTo("Please check your request and try again."));
+            Assert.That(invalidRequestError, Is.Not.Null);
+            Assert.That(invalidRequestError.Code, Is.EqualTo("InvalidRequest"));
+            Assert.That(invalidRequestError.Description, Is.EqualTo("Please check your request and try again."));
         }
 
         [Test]

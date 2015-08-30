@@ -17,7 +17,7 @@ namespace OneTimePassword.Impl.Tests.UnitTests
         {
             otpConfiguration = new OTPConfiguration()
             {
-                IntervalSeconds = 30,
+                OTPExpiryInSeconds = 30,
                 NumberOfDigitsInOTP = 6,
                 PrivateKey = "as9121jd623ms23h232k3"
             };

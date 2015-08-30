@@ -21,7 +21,7 @@ namespace OneTimePassword.Impl.Tests.IntegrationTests
         {
             var otpConfiguration = new OTPConfiguration()
             {
-                IntervalSeconds = 31,
+                OTPExpiryInSeconds = 31,
                 NumberOfDigitsInOTP = 6,
                 PrivateKey = "as9121jd623ms23h232k3"
             };
@@ -41,7 +41,7 @@ namespace OneTimePassword.Impl.Tests.IntegrationTests
             Assert.That(generateOTPResponse, Is.Not.Null);
             Assert.That(generateOTPResponse.UserId, Is.EqualTo(userId));
             Assert.That(generateOTPResponse.OTP, Is.Not.Empty);
-            Assert.That(IsValidNumberFormat(generateOTPResponse.OTP),Is.True);
+            Assert.That(IsValidNumberFormat(generateOTPResponse.OTP), Is.True);
 
             var validateOTPResponse = otpService.ValidateOtp(new ValidateOTPRequest()
             {
@@ -64,7 +64,7 @@ namespace OneTimePassword.Impl.Tests.IntegrationTests
         {
             var otpConfiguration = new OTPConfiguration()
             {
-                IntervalSeconds = 5,
+                OTPExpiryInSeconds = 5,
                 NumberOfDigitsInOTP = 6,
                 PrivateKey = "as9121jd623ms23h232k3"
             };
@@ -99,7 +99,7 @@ namespace OneTimePassword.Impl.Tests.IntegrationTests
         {
             var otpConfiguration = new OTPConfiguration()
             {
-                IntervalSeconds = 2,
+                OTPExpiryInSeconds = 2,
                 NumberOfDigitsInOTP = 6,
                 PrivateKey = "as9121jd623ms23h232k3"
             };
