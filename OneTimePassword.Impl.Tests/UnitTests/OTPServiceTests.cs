@@ -29,14 +29,21 @@ namespace OneTimePassword.Impl.Tests.UnitTests
                 Code = "InvalidRequest",
                 Description = "Please check your request and try again."
             };
-            errorFactory.Expect(factory => factory.GetInvalidRequestError()).Return(invalidRequestError);
+            errorFactory.Stub(factory => factory.GetInvalidRequestError()).Return(invalidRequestError);
 
             genericError = new OTPError()
             {
                 Code = "InternalError",
                 Description = "Something went wrong, please try again later."
             };
-            errorFactory.Expect(factory => factory.GetErrorForException(null)).IgnoreArguments().Return(genericError);
+            errorFactory.Stub(factory => factory.GetErrorForException(null)).IgnoreArguments().Return(genericError);
+        }
+
+        [TearDown]
+        public void Teardown()
+        {
+            otpAlgorithm.VerifyAllExpectations();
+            movingFactorAlgorithm.VerifyAllExpectations();
         }
 
         private IOTPService otpService;

@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using Nancy;
 
-namespace OneTimePassword.Web.Tests
+namespace OneTimePassword.Web.Tests.Framework
 {
     public class TestRootPathProvider : IRootPathProvider
     {

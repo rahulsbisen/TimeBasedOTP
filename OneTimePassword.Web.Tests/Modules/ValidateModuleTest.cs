@@ -4,8 +4,9 @@ using NUnit.Framework;
 using OneTimePassword.Contract.Request;
 using OneTimePassword.Contract.Response;
 using OneTimePassword.Impl;
+using OneTimePassword.Web.Tests.Framework;
 
-namespace OneTimePassword.Web.Tests
+namespace OneTimePassword.Web.Tests.Modules
 {
     [TestFixture]
     public class ValidateModuleTest : NancyTestBase
@@ -14,8 +15,8 @@ namespace OneTimePassword.Web.Tests
         public void ValidatePageShouldHaveValidationForm()
         {
             var browserResponse = browser.Get("/Validate", context => { context.HttpRequest(); });
-           
-            Assert.That(browserResponse.StatusCode,Is.EqualTo(HttpStatusCode.OK), browserResponse.Body.AsString());
+
+            Assert.That(browserResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK), browserResponse.Body.AsString());
             browserResponse.Body["form"].ShouldExist();
             browserResponse.Body["input#validate_userId"].ShouldExistOnce();
             browserResponse.Body["input#validate_otp"].ShouldExistOnce();
@@ -31,7 +32,7 @@ namespace OneTimePassword.Web.Tests
 
             var browserResponse = browser.Post("/Validate", context =>
             {
-                context.FormValue("userId",userId);
+                context.FormValue("userId", userId);
                 context.FormValue("otp", otp);
                 context.HttpRequest();
             });
@@ -71,7 +72,8 @@ namespace OneTimePassword.Web.Tests
 
         private string GetValidOTP(string userId)
         {
-            var otpService = new OTPService(new HmacBasedOTPAlgorithm(), new ExpiryBasedMovingFactorAlgorithm(new OTPConfiguration()),new ErrorFactory(), new OTPConfiguration());
+            var otpService = new OTPService(new HmacBasedOTPAlgorithm(),
+                new ExpiryBasedMovingFactorAlgorithm(new OTPConfiguration()), new ErrorFactory(), new OTPConfiguration());
             var generateOtpRequest = new GenerateOTPRequest() {UserId = userId};
             GenerateOTPResponse generateOTPResponse = otpService.GenerateOtp(generateOtpRequest);
             return generateOTPResponse.OTP;

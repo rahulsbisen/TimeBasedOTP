@@ -1,8 +1,9 @@
 ﻿using Nancy;
 using Nancy.Testing;
 using NUnit.Framework;
+using OneTimePassword.Web.Tests.Framework;
 
-namespace OneTimePassword.Web.Tests
+namespace OneTimePassword.Web.Tests.Modules
 {
     [TestFixture]
     public class GenerateModuleTest : NancyTestBase
@@ -11,8 +12,8 @@ namespace OneTimePassword.Web.Tests
         public void GeneratePageShouldHaveOTPGenerationForm()
         {
             var browserResponse = browser.Get("/Generate", context => { context.HttpRequest(); });
-           
-            Assert.That(browserResponse.StatusCode,Is.EqualTo(HttpStatusCode.OK), browserResponse.Body.AsString());
+
+            Assert.That(browserResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK), browserResponse.Body.AsString());
             browserResponse.Body["form"].ShouldExist();
             browserResponse.Body["input#generate_userId"].ShouldExistOnce();
             browserResponse.Body["input#submit_generateOtp"].ShouldExistOnce();
@@ -24,7 +25,7 @@ namespace OneTimePassword.Web.Tests
         {
             var browserResponse = browser.Post("/Generate", context =>
             {
-                context.FormValue("userId","random_user");
+                context.FormValue("userId", "random_user");
                 context.HttpRequest();
             });
 

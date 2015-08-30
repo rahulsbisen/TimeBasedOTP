@@ -27,6 +27,12 @@ namespace OneTimePassword.Impl.Tests.UnitTests
                 currentTimeFunction);
         }
 
+        [TearDown]
+        public void Teardown()
+        {
+            currentTimeFunction.VerifyAllExpectations();
+        }
+
         [Test()]
         public void ShouldGenerateSameMovingFactorWithinTimeInterval()
         {

@@ -14,7 +14,6 @@ namespace OneTimePassword.Impl.Tests.UnitTests
             hmacBasedOTPAlgorithm = new HmacBasedOTPAlgorithm();
         }
 
-
         [TestCase(1)]
         [TestCase(2)]
         [TestCase(3)]
