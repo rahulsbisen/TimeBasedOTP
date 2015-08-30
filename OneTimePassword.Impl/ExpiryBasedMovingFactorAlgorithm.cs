@@ -24,12 +24,17 @@ namespace OneTimePassword.Impl
 
         public List<long> GetMovingFactorForValidation()
         {
-            var movingFactor = GetMovingFactor();
-            return new List<long>()
+            var currentTime = currentTimeFunction();
+            var result = new List<long>();
+            for (int i = -1; i <=0; i++)
             {
-                movingFactor - 1,
-                movingFactor
-            };
+                var movingFactorDateTime = currentTime.AddSeconds(otpConfiguration.IntervalSeconds*i);
+                TimeSpan ts = GetEphocTimeSpan(movingFactorDateTime);
+                var totalSeconds = (long)ts.TotalSeconds;
+                var movingFactorForValidation = totalSeconds / otpConfiguration.IntervalSeconds;
+                result.Add(movingFactorForValidation);
+            }
+            return result;
         }
 
         private static TimeSpan GetEphocTimeSpan(DateTime dateTime)

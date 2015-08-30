@@ -151,11 +151,11 @@ namespace OneTimePassword.Impl.Tests.UnitTests
             otpAlgorithm.Expect(
                 algorithm =>
                     algorithm.GenerateOTP(userId, otpConfiguration.PrivateKey, movingFactorOne,
-                        otpConfiguration.NumberOfDigitsInOTP)).Return(generatedOtp);
+                        otpConfiguration.NumberOfDigitsInOTP)).Return("809012");
             otpAlgorithm.Expect(
                 algorithm =>
                     algorithm.GenerateOTP(userId, otpConfiguration.PrivateKey, movingFactorTwo,
-                        otpConfiguration.NumberOfDigitsInOTP)).Return("809012");
+                        otpConfiguration.NumberOfDigitsInOTP)).Return(generatedOtp);
 
             var validateOTPResponse = otpService.ValidateOtp(validateOTPRequest);
             Assert.That(validateOTPResponse, Is.Not.Null);

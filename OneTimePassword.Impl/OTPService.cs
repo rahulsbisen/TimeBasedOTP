@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,8 +34,10 @@ namespace OneTimePassword.Impl
                 try
                 {
                     var movingFactor = movingFactorAlgorithm.GetMovingFactor();
-                    var otp = otpAlgorithm.GenerateOTP(generateOtpRequest.UserId, otpConfiguration.PrivateKey, movingFactor,
+                    var otp = otpAlgorithm.GenerateOTP(generateOtpRequest.UserId, otpConfiguration.PrivateKey,
+                        movingFactor,
                         otpConfiguration.NumberOfDigitsInOTP);
+                    Console.WriteLine("Generation: OTP : {0} MovingFactor: {1}", otp, movingFactor);
                     return new GenerateOTPResponse()
                     {
                         UserId = generateOtpRequest.UserId,
@@ -65,15 +68,21 @@ namespace OneTimePassword.Impl
 
                     foreach (var movingFactor in movingFactorForValidation)
                     {
-                        var internalOtp = otpAlgorithm.GenerateOTP(validateOtpRequest.UserId, otpConfiguration.PrivateKey, movingFactor,
-                          otpConfiguration.NumberOfDigitsInOTP);
+                        var internalOtp = otpAlgorithm.GenerateOTP(validateOtpRequest.UserId,
+                            otpConfiguration.PrivateKey, movingFactor,
+                            otpConfiguration.NumberOfDigitsInOTP);
+
+                        Console.WriteLine("Validation: OTP : {0} MovingFactor: {1}", internalOtp, movingFactor);
 
                         var isValidOTP = StringUtilities.StringEqualsInConstantTime(internalOtp, validateOtpRequest.OTP);
-                        return new ValidateOTPResponse()
+                        if (isValidOTP)
                         {
-                            UserId = validateOtpRequest.UserId,
-                            Success = isValidOTP
-                        };
+                            return new ValidateOTPResponse()
+                            {
+                                UserId = validateOtpRequest.UserId,
+                                Success = true
+                            };
+                        }
                     }
 
                     return new ValidateOTPResponse()
@@ -81,7 +90,6 @@ namespace OneTimePassword.Impl
                         UserId = validateOtpRequest.UserId,
                         Success = false
                     };
-
                 }
                 catch (ArgumentOutOfRangeException exception)
                 {

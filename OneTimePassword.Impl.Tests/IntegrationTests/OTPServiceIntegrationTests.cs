@@ -25,7 +25,8 @@ namespace OneTimePassword.Impl.Tests.IntegrationTests
                 NumberOfDigitsInOTP = 6,
                 PrivateKey = "as9121jd623ms23h232k3"
             };
-            otpService = new OTPService(new HmacBasedOTPAlgorithm(), new ExpiryBasedMovingFactorAlgorithm(otpConfiguration), new ErrorFactory(),
+            otpService = new OTPService(new HmacBasedOTPAlgorithm(),
+                new ExpiryBasedMovingFactorAlgorithm(otpConfiguration), new ErrorFactory(),
                 otpConfiguration);
         }
 
@@ -36,10 +37,11 @@ namespace OneTimePassword.Impl.Tests.IntegrationTests
             {
                 UserId = userId
             });
-            
+
             Assert.That(generateOTPResponse, Is.Not.Null);
             Assert.That(generateOTPResponse.UserId, Is.EqualTo(userId));
             Assert.That(generateOTPResponse.OTP, Is.Not.Empty);
+            Assert.That(IsValidNumberFormat(generateOTPResponse.OTP),Is.True);
 
             var validateOTPResponse = otpService.ValidateOtp(new ValidateOTPRequest()
             {
@@ -51,6 +53,12 @@ namespace OneTimePassword.Impl.Tests.IntegrationTests
             Assert.That(validateOTPResponse.Success, Is.True);
         }
 
+        private bool IsValidNumberFormat(string otp)
+        {
+            var intValue = Int32.Parse(otp);
+            return intValue > 0;
+        }
+
         [Test]
         public void ShouldValidateWithinWithinExpiryLimit()
         {
@@ -60,7 +68,8 @@ namespace OneTimePassword.Impl.Tests.IntegrationTests
                 NumberOfDigitsInOTP = 6,
                 PrivateKey = "as9121jd623ms23h232k3"
             };
-            otpService = new OTPService(new HmacBasedOTPAlgorithm(), new ExpiryBasedMovingFactorAlgorithm(otpConfiguration), new ErrorFactory(),
+            otpService = new OTPService(new HmacBasedOTPAlgorithm(),
+                new ExpiryBasedMovingFactorAlgorithm(otpConfiguration), new ErrorFactory(),
                 otpConfiguration);
 
             string userId = "2j32jk432m23482394jkddsd";
@@ -83,7 +92,6 @@ namespace OneTimePassword.Impl.Tests.IntegrationTests
             Assert.That(validateOTPResponse, Is.Not.Null);
             Assert.That(validateOTPResponse.UserId, Is.EqualTo(userId));
             Assert.That(validateOTPResponse.Success, Is.True);
-
         }
 
         [Test]
@@ -91,11 +99,12 @@ namespace OneTimePassword.Impl.Tests.IntegrationTests
         {
             var otpConfiguration = new OTPConfiguration()
             {
-                IntervalSeconds = 3,
+                IntervalSeconds = 2,
                 NumberOfDigitsInOTP = 6,
                 PrivateKey = "as9121jd623ms23h232k3"
             };
-            otpService = new OTPService(new HmacBasedOTPAlgorithm(), new ExpiryBasedMovingFactorAlgorithm(otpConfiguration), new ErrorFactory(),
+            otpService = new OTPService(new HmacBasedOTPAlgorithm(),
+                new ExpiryBasedMovingFactorAlgorithm(otpConfiguration), new ErrorFactory(),
                 otpConfiguration);
 
             string userId = "2j32jk432m23482394jkddsd";
