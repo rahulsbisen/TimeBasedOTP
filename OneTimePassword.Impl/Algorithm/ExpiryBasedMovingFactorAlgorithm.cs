@@ -5,14 +5,14 @@ namespace OneTimePassword.Impl.Algorithm
 {
     public class ExpiryBasedMovingFactorAlgorithm : IMovingFactorAlgorithm
     {
-        private readonly OTPConfiguration _otpConfiguration;
         private readonly Func<DateTime> _currentTimeFunction;
+        private readonly OTPConfiguration _otpConfiguration;
 
         public ExpiryBasedMovingFactorAlgorithm(OTPConfiguration otpConfiguration,
             Func<DateTime> currentTimeFunction = null)
         {
-            this._currentTimeFunction = currentTimeFunction ?? (() => DateTime.Now);
-            this._otpConfiguration = otpConfiguration;
+            _currentTimeFunction = currentTimeFunction ?? (() => DateTime.Now);
+            _otpConfiguration = otpConfiguration;
         }
 
         public long GetMovingFactor()

@@ -2,7 +2,6 @@
 using Nancy.ModelBinding;
 using OneTimePassword.Contract;
 using OneTimePassword.Contract.Request;
-using OneTimePassword.Contract.Response;
 
 namespace OneTimePassword.Web.Modules
 {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using OneTimePassword.Impl.Algorithm;
 using Rhino.Mocks;
@@ -9,14 +8,10 @@ namespace OneTimePassword.Impl.Tests.UnitTests
     [TestFixture(Category = "UnitTests")]
     public class ExpiryBasedMovingFactorAlgorithmTests
     {
-        private OTPConfiguration _otpConfiguration;
-        private Func<DateTime> _currentTimeFunction;
-        private IMovingFactorAlgorithm _expiryBasedMovingFactorAlgorithm;
-
         [SetUp]
         public void Setup()
         {
-            _otpConfiguration = new OTPConfiguration()
+            _otpConfiguration = new OTPConfiguration
             {
                 OTPExpiryInSeconds = 30,
                 NumberOfDigitsInOTP = 6,
@@ -34,21 +29,11 @@ namespace OneTimePassword.Impl.Tests.UnitTests
             _currentTimeFunction.VerifyAllExpectations();
         }
 
-        [Test()]
-        public void ShouldGenerateSameMovingFactorWithinTimeInterval()
-        {
-            var dateTime = new DateTime(2015, 08, 29, 09, 00, 00);
-            var dateTimePlus10Seconds = dateTime.AddSeconds(10);
-            _currentTimeFunction.Expect(func => func()).Return(dateTime).Repeat.Once();
-            var firstMovingFactor = _expiryBasedMovingFactorAlgorithm.GetMovingFactor();
+        private OTPConfiguration _otpConfiguration;
+        private Func<DateTime> _currentTimeFunction;
+        private IMovingFactorAlgorithm _expiryBasedMovingFactorAlgorithm;
 
-            _currentTimeFunction.Expect(func => func()).Return(dateTimePlus10Seconds).Repeat.Once();
-            var secondMovingFactor = _expiryBasedMovingFactorAlgorithm.GetMovingFactor();
-
-            Assert.That(firstMovingFactor, Is.EqualTo(secondMovingFactor));
-        }
-
-        [Test()]
+        [Test]
         public void ShouldGenerateDifferentMovingFactorOutsideTimeInterval()
         {
             var dateTime = new DateTime(2015, 08, 29, 09, 00, 00);
@@ -60,6 +45,20 @@ namespace OneTimePassword.Impl.Tests.UnitTests
             var secondMovingFactor = _expiryBasedMovingFactorAlgorithm.GetMovingFactor();
 
             Assert.That(firstMovingFactor, Is.Not.EqualTo(secondMovingFactor));
+        }
+
+        [Test]
+        public void ShouldGenerateSameMovingFactorWithinTimeInterval()
+        {
+            var dateTime = new DateTime(2015, 08, 29, 09, 00, 00);
+            var dateTimePlus10Seconds = dateTime.AddSeconds(10);
+            _currentTimeFunction.Expect(func => func()).Return(dateTime).Repeat.Once();
+            var firstMovingFactor = _expiryBasedMovingFactorAlgorithm.GetMovingFactor();
+
+            _currentTimeFunction.Expect(func => func()).Return(dateTimePlus10Seconds).Repeat.Once();
+            var secondMovingFactor = _expiryBasedMovingFactorAlgorithm.GetMovingFactor();
+
+            Assert.That(firstMovingFactor, Is.EqualTo(secondMovingFactor));
         }
 
         [Test]

@@ -2,24 +2,35 @@
 <html>
 <head>
     <title>Time Based OTP Authenticator</title>
+    <style type="text/css">
+        .container {
+            width: 250px;
+            clear: both;
+        }
+
+            .container input {
+                width: 100%;
+                clear: both;
+            }
+    </style>
 </head>
 <body>
 
-<div>
+<div class="container">
     <p>Validate OTP:</p>
     <form method="post" name="ValidateOTP">
         <label>UserId: </label>
         <input type="text" name="userId" id="validate_userId"/>
-        <br/>
+        <br /><br />
         <label>OTP: </label>
         <input type="text" name="otp" id="validate_otp"/>
         <br/><br/>
         <input type="submit" value="Validate" id="submit_validateOtp"/>
     </form>
 </div>
-@if (@Model != null)
+@if(@Model != null)
 {
-    if (@Model.Error != null)
+    if(@Model.Error != null)
     {
         <div id="error">
             <p>
@@ -31,7 +42,7 @@
     else
     {
         <div id="result">
-            if (@Model.Success)
+            @if(@Model.Success)
             {
             <p>
                 <b>Authentication Success.</b>

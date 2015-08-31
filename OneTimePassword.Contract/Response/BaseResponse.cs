@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace OneTimePassword.Contract.Response
+﻿namespace OneTimePassword.Contract.Response
 {
     public class BaseResponse
     {

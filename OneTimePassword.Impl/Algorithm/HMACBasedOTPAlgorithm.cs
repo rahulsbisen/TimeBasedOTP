@@ -6,11 +6,10 @@ namespace OneTimePassword.Impl.Algorithm
 {
     public class HmacBasedOTPAlgorithm : IOTPAlgorithm
     {
-        private static readonly int[] DigitsPower = new int[]
-        {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000};
+        private static readonly int[] DigitsPower = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000};
 
         /// <exception cref="ArgumentOutOfRangeException">Number of digits are not between 1 and 8 inclusive.</exception>
-        public string GenerateOTP(String input, String secret, long movingFactor, int numberOfDigits)
+        public string GenerateOTP(string input, string secret, long movingFactor, int numberOfDigits)
         {
             ValidateInput(input, secret, numberOfDigits);
 
@@ -39,12 +38,12 @@ namespace OneTimePassword.Impl.Algorithm
                 throw new ArgumentOutOfRangeException(nameof(numberOfDigits));
             }
 
-            if (String.IsNullOrEmpty(input))
+            if (string.IsNullOrEmpty(input))
             {
                 throw new ArgumentOutOfRangeException(nameof(input));
             }
 
-            if (String.IsNullOrEmpty(secret))
+            if (string.IsNullOrEmpty(secret))
             {
                 throw new ArgumentOutOfRangeException(nameof(secret));
             }

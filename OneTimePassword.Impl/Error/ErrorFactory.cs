@@ -7,7 +7,7 @@ namespace OneTimePassword.Impl.Error
     {
         public OTPError GetInvalidRequestError()
         {
-            return new OTPError()
+            return new OTPError
             {
                 Code = "InvalidRequest",
                 Description = "Please check your request and try again."
@@ -16,7 +16,7 @@ namespace OneTimePassword.Impl.Error
 
         public OTPError GetErrorForException(ArgumentOutOfRangeException exception)
         {
-            return new OTPError()
+            return new OTPError
             {
                 Code = "InternalError",
                 Description = "Something went wrong, please try again later."

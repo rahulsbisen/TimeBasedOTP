@@ -2,13 +2,25 @@
 <html>
 <head>
     <title>Time Based OTP Authenticator</title>
+    <style type="text/css">
+        .container {
+            width: 250px;
+            clear: both;
+        }
+
+            .container input {
+                width: 100%;
+                clear: both;
+            }
+    </style>
 </head>
 <body>
-<div>
+<div class="container">
     <p>Generate OTP:</p>
     <form method="post" name="GenerateOTP">
         <label>UserId: </label>
         <input type="text" name="userId" id="generate_userId"/>
+        <br /><br />
         <input type="submit" value="Generate" id="submit_generateOtp"/>
     </form>
 </div>

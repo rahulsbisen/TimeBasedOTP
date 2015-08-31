@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace OneTimePassword.Contract.Request
+﻿namespace OneTimePassword.Contract.Request
 {
     public class GenerateOTPRequest
     {
-        public String UserId { get; set; }
+        public string UserId { get; set; }
     }
 }
