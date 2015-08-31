@@ -1,17 +1,19 @@
 ﻿using System;
 using NUnit.Framework;
+using OneTimePassword.Impl.Algorithm;
+using OneTimePassword.Impl.Utils;
 
 namespace OneTimePassword.Impl.Tests.UnitTests
 {
     [TestFixture(Category = "UnitTests")]
     public class HmacBasedOTPAlgorithmTests
     {
-        private IOTPAlgorithm hmacBasedOTPAlgorithm;
+        private IOTPAlgorithm _hmacBasedOTPAlgorithm;
 
         [SetUp]
         public void Setup()
         {
-            hmacBasedOTPAlgorithm = new HmacBasedOTPAlgorithm();
+            _hmacBasedOTPAlgorithm = new HmacBasedOTPAlgorithm();
         }
 
         [TestCase(1)]
@@ -24,7 +26,7 @@ namespace OneTimePassword.Impl.Tests.UnitTests
         [TestCase(8)]
         public void ShouldGenerateAnOTPWithGivenNumberOfDigits(int numberOfDigits)
         {
-            var generateOTP = hmacBasedOTPAlgorithm.GenerateOTP("hdaska7232kls6", "alasnkasdhas7232", 10, numberOfDigits);
+            var generateOTP = _hmacBasedOTPAlgorithm.GenerateOTP("hdaska7232kls6", "alasnkasdhas7232", 10, numberOfDigits);
             Assert.That(generateOTP, Is.Not.Null);
             Assert.That(generateOTP.Length, Is.EqualTo(numberOfDigits));
         }
@@ -35,27 +37,27 @@ namespace OneTimePassword.Impl.Tests.UnitTests
         [TestCase(-3)]
         public void ShouldThrowExceptionForInvalidNumberOfDigits(int numberOfDigits)
         {
-            hmacBasedOTPAlgorithm.GenerateOTP("hdaska7232kls6", "alasnkasdhas7232", 10, numberOfDigits);
+            _hmacBasedOTPAlgorithm.GenerateOTP("hdaska7232kls6", "alasnkasdhas7232", 10, numberOfDigits);
         }
 
         [Test, ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void ShouldThrowExceptionIfSecretIsNullOrEmpty()
         {
-            hmacBasedOTPAlgorithm.GenerateOTP("hdaska7232kls6", "", 10, 5);
+            _hmacBasedOTPAlgorithm.GenerateOTP("hdaska7232kls6", "", 10, 5);
         }
 
         [Test, ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void ShouldThrowExceptionIfUserInputIsNullOrEmpty()
         {
-            hmacBasedOTPAlgorithm.GenerateOTP("", "alasnkasdhas7232", 10, 5);
+            _hmacBasedOTPAlgorithm.GenerateOTP("", "alasnkasdhas7232", 10, 5);
         }
 
         [Test]
         public void ShouldGenerateSameOTPGivenSameUserInputAndMovingFactor()
         {
-            var generateOTPFirst = hmacBasedOTPAlgorithm.GenerateOTP("hdaska7232kls6", "alasnkasdhas7232", 10, 6);
+            var generateOTPFirst = _hmacBasedOTPAlgorithm.GenerateOTP("hdaska7232kls6", "alasnkasdhas7232", 10, 6);
 
-            var generateOTPSecond = hmacBasedOTPAlgorithm.GenerateOTP("hdaska7232kls6", "alasnkasdhas7232", 10, 6);
+            var generateOTPSecond = _hmacBasedOTPAlgorithm.GenerateOTP("hdaska7232kls6", "alasnkasdhas7232", 10, 6);
 
             Assert.That(StringUtilities.StringEqualsInConstantTime(generateOTPFirst, generateOTPSecond), Is.True);
         }
@@ -63,9 +65,9 @@ namespace OneTimePassword.Impl.Tests.UnitTests
         [Test]
         public void ShouldGenerateDifferentOTPGivenSameUserInputAndDifferentMovingFactor()
         {
-            var generateOTPFirst = hmacBasedOTPAlgorithm.GenerateOTP("hdaska7232kls6", "alasnkasdhas7232", 10, 6);
+            var generateOTPFirst = _hmacBasedOTPAlgorithm.GenerateOTP("hdaska7232kls6", "alasnkasdhas7232", 10, 6);
 
-            var generateOTPSecond = hmacBasedOTPAlgorithm.GenerateOTP("hdaska7232kls6", "alasnkasdhas7232", 12, 6);
+            var generateOTPSecond = _hmacBasedOTPAlgorithm.GenerateOTP("hdaska7232kls6", "alasnkasdhas7232", 12, 6);
 
             Assert.That(StringUtilities.StringEqualsInConstantTime(generateOTPFirst, generateOTPSecond), Is.False);
         }
@@ -73,9 +75,9 @@ namespace OneTimePassword.Impl.Tests.UnitTests
         [Test]
         public void ShouldGenerateDifferentOTPGivenDifferentUserInputAndSameMovingFactor()
         {
-            var generateOTPFirst = hmacBasedOTPAlgorithm.GenerateOTP("hdaska7232kls6", "alasnkasdhas7232", 10, 6);
+            var generateOTPFirst = _hmacBasedOTPAlgorithm.GenerateOTP("hdaska7232kls6", "alasnkasdhas7232", 10, 6);
 
-            var generateOTPSecond = hmacBasedOTPAlgorithm.GenerateOTP("onasmasoawlwe3", "alasnkasdhas7232", 10, 6);
+            var generateOTPSecond = _hmacBasedOTPAlgorithm.GenerateOTP("onasmasoawlwe3", "alasnkasdhas7232", 10, 6);
 
             Assert.That(StringUtilities.StringEqualsInConstantTime(generateOTPFirst, generateOTPSecond), Is.False);
         }

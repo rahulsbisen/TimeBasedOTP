@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OneTimePassword.Impl
+namespace OneTimePassword.Impl.Algorithm
 {
     public interface IOTPAlgorithm
     {

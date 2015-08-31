@@ -1,7 +1,7 @@
 using System;
 using OneTimePassword.Contract.Response;
 
-namespace OneTimePassword.Impl
+namespace OneTimePassword.Impl.Error
 {
     public class ErrorFactory : IErrorFactory
     {

@@ -11,7 +11,7 @@ namespace OneTimePassword.Web.Tests.Modules
         [Test]
         public void GeneratePageShouldHaveOTPGenerationForm()
         {
-            var browserResponse = browser.Get("/Generate", context => { context.HttpRequest(); });
+            var browserResponse = Browser.Get("/Generate", context => { context.HttpRequest(); });
 
             Assert.That(browserResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK), browserResponse.Body.AsString());
             browserResponse.Body["form"].ShouldExist();
@@ -23,7 +23,7 @@ namespace OneTimePassword.Web.Tests.Modules
         [Test]
         public void GenerateOTPOnFormSubmit()
         {
-            var browserResponse = browser.Post("/Generate", context =>
+            var browserResponse = Browser.Post("/Generate", context =>
             {
                 context.FormValue("userId", "random_user");
                 context.HttpRequest();

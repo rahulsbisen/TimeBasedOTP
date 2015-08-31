@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using OneTimePassword.Impl.Algorithm;
 using Rhino.Mocks;
 
 namespace OneTimePassword.Impl.Tests.UnitTests
@@ -8,29 +9,29 @@ namespace OneTimePassword.Impl.Tests.UnitTests
     [TestFixture(Category = "UnitTests")]
     public class ExpiryBasedMovingFactorAlgorithmTests
     {
-        private OTPConfiguration otpConfiguration;
-        private Func<DateTime> currentTimeFunction;
-        private IMovingFactorAlgorithm expiryBasedMovingFactorAlgorithm;
+        private OTPConfiguration _otpConfiguration;
+        private Func<DateTime> _currentTimeFunction;
+        private IMovingFactorAlgorithm _expiryBasedMovingFactorAlgorithm;
 
         [SetUp]
         public void Setup()
         {
-            otpConfiguration = new OTPConfiguration()
+            _otpConfiguration = new OTPConfiguration()
             {
                 OTPExpiryInSeconds = 30,
                 NumberOfDigitsInOTP = 6,
                 PrivateKey = "as9121jd623ms23h232k3"
             };
 
-            currentTimeFunction = MockRepository.GenerateMock<Func<DateTime>>();
-            expiryBasedMovingFactorAlgorithm = new ExpiryBasedMovingFactorAlgorithm(otpConfiguration,
-                currentTimeFunction);
+            _currentTimeFunction = MockRepository.GenerateMock<Func<DateTime>>();
+            _expiryBasedMovingFactorAlgorithm = new ExpiryBasedMovingFactorAlgorithm(_otpConfiguration,
+                _currentTimeFunction);
         }
 
         [TearDown]
         public void Teardown()
         {
-            currentTimeFunction.VerifyAllExpectations();
+            _currentTimeFunction.VerifyAllExpectations();
         }
 
         [Test()]
@@ -38,11 +39,11 @@ namespace OneTimePassword.Impl.Tests.UnitTests
         {
             var dateTime = new DateTime(2015, 08, 29, 09, 00, 00);
             var dateTimePlus10Seconds = dateTime.AddSeconds(10);
-            currentTimeFunction.Expect(func => func()).Return(dateTime).Repeat.Once();
-            var firstMovingFactor = expiryBasedMovingFactorAlgorithm.GetMovingFactor();
+            _currentTimeFunction.Expect(func => func()).Return(dateTime).Repeat.Once();
+            var firstMovingFactor = _expiryBasedMovingFactorAlgorithm.GetMovingFactor();
 
-            currentTimeFunction.Expect(func => func()).Return(dateTimePlus10Seconds).Repeat.Once();
-            var secondMovingFactor = expiryBasedMovingFactorAlgorithm.GetMovingFactor();
+            _currentTimeFunction.Expect(func => func()).Return(dateTimePlus10Seconds).Repeat.Once();
+            var secondMovingFactor = _expiryBasedMovingFactorAlgorithm.GetMovingFactor();
 
             Assert.That(firstMovingFactor, Is.EqualTo(secondMovingFactor));
         }
@@ -52,11 +53,11 @@ namespace OneTimePassword.Impl.Tests.UnitTests
         {
             var dateTime = new DateTime(2015, 08, 29, 09, 00, 00);
             var dateTimePlus31Seconds = dateTime.AddSeconds(30);
-            currentTimeFunction.Expect(func => func()).Return(dateTime).Repeat.Once();
-            var firstMovingFactor = expiryBasedMovingFactorAlgorithm.GetMovingFactor();
+            _currentTimeFunction.Expect(func => func()).Return(dateTime).Repeat.Once();
+            var firstMovingFactor = _expiryBasedMovingFactorAlgorithm.GetMovingFactor();
 
-            currentTimeFunction.Expect(func => func()).Return(dateTimePlus31Seconds).Repeat.Once();
-            var secondMovingFactor = expiryBasedMovingFactorAlgorithm.GetMovingFactor();
+            _currentTimeFunction.Expect(func => func()).Return(dateTimePlus31Seconds).Repeat.Once();
+            var secondMovingFactor = _expiryBasedMovingFactorAlgorithm.GetMovingFactor();
 
             Assert.That(firstMovingFactor, Is.Not.EqualTo(secondMovingFactor));
         }
@@ -66,13 +67,13 @@ namespace OneTimePassword.Impl.Tests.UnitTests
         {
             var dateTime = new DateTime(2015, 08, 29, 09, 00, 29);
             var dateTimePlus10Seconds = dateTime.AddSeconds(10);
-            currentTimeFunction.Expect(func => func()).Return(dateTime).Repeat.Once();
-            var firstMovingFactor = expiryBasedMovingFactorAlgorithm.GetMovingFactor();
+            _currentTimeFunction.Expect(func => func()).Return(dateTime).Repeat.Once();
+            var firstMovingFactor = _expiryBasedMovingFactorAlgorithm.GetMovingFactor();
 
-            currentTimeFunction.Expect(func => func()).Return(dateTimePlus10Seconds).Repeat.Twice();
-            var secondMovingFactor = expiryBasedMovingFactorAlgorithm.GetMovingFactor();
+            _currentTimeFunction.Expect(func => func()).Return(dateTimePlus10Seconds).Repeat.Twice();
+            var secondMovingFactor = _expiryBasedMovingFactorAlgorithm.GetMovingFactor();
 
-            var movingFactorForValidation = expiryBasedMovingFactorAlgorithm.GetMovingFactorForValidation();
+            var movingFactorForValidation = _expiryBasedMovingFactorAlgorithm.GetMovingFactorForValidation();
             Assert.That(movingFactorForValidation, Is.Not.Null);
             Assert.That(movingFactorForValidation, Has.Member(firstMovingFactor));
             Assert.That(movingFactorForValidation, Has.Member(secondMovingFactor));
@@ -83,13 +84,13 @@ namespace OneTimePassword.Impl.Tests.UnitTests
         {
             var dateTime = new DateTime(2015, 08, 29, 09, 00, 29);
             var dateTimePlus31Seconds = dateTime.AddSeconds(31);
-            currentTimeFunction.Expect(func => func()).Return(dateTime).Repeat.Once();
-            var firstMovingFactor = expiryBasedMovingFactorAlgorithm.GetMovingFactor();
+            _currentTimeFunction.Expect(func => func()).Return(dateTime).Repeat.Once();
+            var firstMovingFactor = _expiryBasedMovingFactorAlgorithm.GetMovingFactor();
 
-            currentTimeFunction.Expect(func => func()).Return(dateTimePlus31Seconds).Repeat.Twice();
-            var secondMovingFactor = expiryBasedMovingFactorAlgorithm.GetMovingFactor();
+            _currentTimeFunction.Expect(func => func()).Return(dateTimePlus31Seconds).Repeat.Twice();
+            var secondMovingFactor = _expiryBasedMovingFactorAlgorithm.GetMovingFactor();
 
-            var movingFactorForValidation = expiryBasedMovingFactorAlgorithm.GetMovingFactorForValidation();
+            var movingFactorForValidation = _expiryBasedMovingFactorAlgorithm.GetMovingFactorForValidation();
             Assert.That(movingFactorForValidation, Is.Not.Null);
             Assert.That(movingFactorForValidation, Has.No.Member(firstMovingFactor));
             Assert.That(movingFactorForValidation, Has.Member(secondMovingFactor));

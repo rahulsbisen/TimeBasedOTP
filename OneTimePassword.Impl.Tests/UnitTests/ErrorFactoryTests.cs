@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using OneTimePassword.Impl.Error;
 
 namespace OneTimePassword.Impl.Tests.UnitTests
 {

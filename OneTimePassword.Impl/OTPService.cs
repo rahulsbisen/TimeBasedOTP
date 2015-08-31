@@ -2,24 +2,27 @@
 using OneTimePassword.Contract;
 using OneTimePassword.Contract.Request;
 using OneTimePassword.Contract.Response;
+using OneTimePassword.Impl.Algorithm;
+using OneTimePassword.Impl.Error;
+using OneTimePassword.Impl.Utils;
 using static System.String;
 
 namespace OneTimePassword.Impl
 {
     public class OTPService : IOTPService
     {
-        private readonly IOTPAlgorithm otpAlgorithm;
-        private readonly IMovingFactorAlgorithm movingFactorAlgorithm;
-        private readonly IErrorFactory errorFactory;
-        private readonly OTPConfiguration otpConfiguration;
+        private readonly IOTPAlgorithm _otpAlgorithm;
+        private readonly IMovingFactorAlgorithm _movingFactorAlgorithm;
+        private readonly IErrorFactory _errorFactory;
+        private readonly OTPConfiguration _otpConfiguration;
 
         public OTPService(IOTPAlgorithm otpAlgorithm, IMovingFactorAlgorithm movingFactorAlgorithm,
             IErrorFactory errorFactory, OTPConfiguration otpConfiguration)
         {
-            this.otpAlgorithm = otpAlgorithm;
-            this.movingFactorAlgorithm = movingFactorAlgorithm;
-            this.errorFactory = errorFactory;
-            this.otpConfiguration = otpConfiguration;
+            this._otpAlgorithm = otpAlgorithm;
+            this._movingFactorAlgorithm = movingFactorAlgorithm;
+            this._errorFactory = errorFactory;
+            this._otpConfiguration = otpConfiguration;
         }
 
         public GenerateOTPResponse GenerateOtp(GenerateOTPRequest generateOtpRequest)
@@ -28,10 +31,10 @@ namespace OneTimePassword.Impl
             {
                 try
                 {
-                    var movingFactor = movingFactorAlgorithm.GetMovingFactor();
-                    var otp = otpAlgorithm.GenerateOTP(generateOtpRequest.UserId, otpConfiguration.PrivateKey,
+                    var movingFactor = _movingFactorAlgorithm.GetMovingFactor();
+                    var otp = _otpAlgorithm.GenerateOTP(generateOtpRequest.UserId, _otpConfiguration.PrivateKey,
                         movingFactor,
-                        otpConfiguration.NumberOfDigitsInOTP);
+                        _otpConfiguration.NumberOfDigitsInOTP);
                     Console.WriteLine("Generation: OTP : {0} MovingFactor: {1}", otp, movingFactor);
                     return new GenerateOTPResponse()
                     {
@@ -43,13 +46,13 @@ namespace OneTimePassword.Impl
                 {
                     return new GenerateOTPResponse()
                     {
-                        Error = errorFactory.GetErrorForException(exception)
+                        Error = _errorFactory.GetErrorForException(exception)
                     };
                 }
             }
             return new GenerateOTPResponse()
             {
-                Error = errorFactory.GetInvalidRequestError()
+                Error = _errorFactory.GetInvalidRequestError()
             };
         }
 
@@ -59,13 +62,13 @@ namespace OneTimePassword.Impl
             {
                 try
                 {
-                    var movingFactorForValidation = movingFactorAlgorithm.GetMovingFactorForValidation();
+                    var movingFactorForValidation = _movingFactorAlgorithm.GetMovingFactorForValidation();
 
                     foreach (var movingFactor in movingFactorForValidation)
                     {
-                        var internalOtp = otpAlgorithm.GenerateOTP(validateOtpRequest.UserId,
-                            otpConfiguration.PrivateKey, movingFactor,
-                            otpConfiguration.NumberOfDigitsInOTP);
+                        var internalOtp = _otpAlgorithm.GenerateOTP(validateOtpRequest.UserId,
+                            _otpConfiguration.PrivateKey, movingFactor,
+                            _otpConfiguration.NumberOfDigitsInOTP);
 
                         Console.WriteLine("Validation: OTP : {0} MovingFactor: {1}", internalOtp, movingFactor);
 
@@ -90,13 +93,13 @@ namespace OneTimePassword.Impl
                 {
                     return new ValidateOTPResponse()
                     {
-                        Error = errorFactory.GetErrorForException(exception)
+                        Error = _errorFactory.GetErrorForException(exception)
                     };
                 }
             }
             return new ValidateOTPResponse()
             {
-                Error = errorFactory.GetInvalidRequestError()
+                Error = _errorFactory.GetInvalidRequestError()
             };
         }
     }

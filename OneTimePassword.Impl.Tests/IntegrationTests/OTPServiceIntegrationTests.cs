@@ -8,13 +8,15 @@ using NUnit.Framework;
 using OneTimePassword.Contract;
 using OneTimePassword.Contract.Request;
 using OneTimePassword.Contract.Response;
+using OneTimePassword.Impl.Algorithm;
+using OneTimePassword.Impl.Error;
 
 namespace OneTimePassword.Impl.Tests.IntegrationTests
 {
     [TestFixture(Category = "IntegrationTests")]
     public class OTPServiceIntegrationTests
     {
-        private IOTPService otpService;
+        private IOTPService _otpService;
 
         [SetUp]
         public void Setup()
@@ -25,7 +27,7 @@ namespace OneTimePassword.Impl.Tests.IntegrationTests
                 NumberOfDigitsInOTP = 6,
                 PrivateKey = "as9121jd623ms23h232k3"
             };
-            otpService = new OTPService(new HmacBasedOTPAlgorithm(),
+            _otpService = new OTPService(new HmacBasedOTPAlgorithm(),
                 new ExpiryBasedMovingFactorAlgorithm(otpConfiguration), new ErrorFactory(),
                 otpConfiguration);
         }
@@ -33,7 +35,7 @@ namespace OneTimePassword.Impl.Tests.IntegrationTests
         [TestCaseSource(nameof(GeneratedUserIds))]
         public void GenerateAndValidateOTP(String userId)
         {
-            var generateOTPResponse = otpService.GenerateOtp(new GenerateOTPRequest()
+            var generateOTPResponse = _otpService.GenerateOtp(new GenerateOTPRequest()
             {
                 UserId = userId
             });
@@ -43,7 +45,7 @@ namespace OneTimePassword.Impl.Tests.IntegrationTests
             Assert.That(generateOTPResponse.OTP, Is.Not.Empty);
             Assert.That(IsValidNumberFormat(generateOTPResponse.OTP), Is.True);
 
-            var validateOTPResponse = otpService.ValidateOtp(new ValidateOTPRequest()
+            var validateOTPResponse = _otpService.ValidateOtp(new ValidateOTPRequest()
             {
                 OTP = generateOTPResponse.OTP,
                 UserId = userId
@@ -68,12 +70,12 @@ namespace OneTimePassword.Impl.Tests.IntegrationTests
                 NumberOfDigitsInOTP = 6,
                 PrivateKey = "as9121jd623ms23h232k3"
             };
-            otpService = new OTPService(new HmacBasedOTPAlgorithm(),
+            _otpService = new OTPService(new HmacBasedOTPAlgorithm(),
                 new ExpiryBasedMovingFactorAlgorithm(otpConfiguration), new ErrorFactory(),
                 otpConfiguration);
 
             string userId = "2j32jk432m23482394jkddsd";
-            var generateOTPResponse = otpService.GenerateOtp(new GenerateOTPRequest()
+            var generateOTPResponse = _otpService.GenerateOtp(new GenerateOTPRequest()
             {
                 UserId = userId
             });
@@ -84,7 +86,7 @@ namespace OneTimePassword.Impl.Tests.IntegrationTests
 
             Thread.Sleep(3000);
 
-            var validateOTPResponse = otpService.ValidateOtp(new ValidateOTPRequest()
+            var validateOTPResponse = _otpService.ValidateOtp(new ValidateOTPRequest()
             {
                 OTP = generateOTPResponse.OTP,
                 UserId = userId
@@ -103,12 +105,12 @@ namespace OneTimePassword.Impl.Tests.IntegrationTests
                 NumberOfDigitsInOTP = 6,
                 PrivateKey = "as9121jd623ms23h232k3"
             };
-            otpService = new OTPService(new HmacBasedOTPAlgorithm(),
+            _otpService = new OTPService(new HmacBasedOTPAlgorithm(),
                 new ExpiryBasedMovingFactorAlgorithm(otpConfiguration), new ErrorFactory(),
                 otpConfiguration);
 
             string userId = "2j32jk432m23482394jkddsd";
-            var generateOTPResponse = otpService.GenerateOtp(new GenerateOTPRequest()
+            var generateOTPResponse = _otpService.GenerateOtp(new GenerateOTPRequest()
             {
                 UserId = userId
             });
@@ -119,7 +121,7 @@ namespace OneTimePassword.Impl.Tests.IntegrationTests
 
             Thread.Sleep(5000);
 
-            var validateOTPResponse = otpService.ValidateOtp(new ValidateOTPRequest()
+            var validateOTPResponse = _otpService.ValidateOtp(new ValidateOTPRequest()
             {
                 OTP = generateOTPResponse.OTP,
                 UserId = userId

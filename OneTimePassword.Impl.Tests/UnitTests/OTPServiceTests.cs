@@ -4,6 +4,8 @@ using NUnit.Framework;
 using OneTimePassword.Contract;
 using OneTimePassword.Contract.Request;
 using OneTimePassword.Contract.Response;
+using OneTimePassword.Impl.Algorithm;
+using OneTimePassword.Impl.Error;
 using Rhino.Mocks;
 
 namespace OneTimePassword.Impl.Tests.UnitTests
@@ -14,45 +16,45 @@ namespace OneTimePassword.Impl.Tests.UnitTests
         [SetUp]
         public void Setup()
         {
-            otpAlgorithm = MockRepository.GenerateMock<IOTPAlgorithm>();
-            movingFactorAlgorithm = MockRepository.GenerateMock<IMovingFactorAlgorithm>();
-            errorFactory = MockRepository.GenerateMock<IErrorFactory>();
-            otpConfiguration = new OTPConfiguration()
+            _otpAlgorithm = MockRepository.GenerateMock<IOTPAlgorithm>();
+            _movingFactorAlgorithm = MockRepository.GenerateMock<IMovingFactorAlgorithm>();
+            _errorFactory = MockRepository.GenerateMock<IErrorFactory>();
+            _otpConfiguration = new OTPConfiguration()
             {
                 OTPExpiryInSeconds = 31,
                 NumberOfDigitsInOTP = 6,
                 PrivateKey = "as9121jd623ms23h232k3"
             };
-            otpService = new OTPService(otpAlgorithm, movingFactorAlgorithm, errorFactory, otpConfiguration);
-            invalidRequestError = new OTPError()
+            _otpService = new OTPService(_otpAlgorithm, _movingFactorAlgorithm, _errorFactory, _otpConfiguration);
+            _invalidRequestError = new OTPError()
             {
                 Code = "InvalidRequest",
                 Description = "Please check your request and try again."
             };
-            errorFactory.Stub(factory => factory.GetInvalidRequestError()).Return(invalidRequestError);
+            _errorFactory.Stub(factory => factory.GetInvalidRequestError()).Return(_invalidRequestError);
 
-            genericError = new OTPError()
+            _genericError = new OTPError()
             {
                 Code = "InternalError",
                 Description = "Something went wrong, please try again later."
             };
-            errorFactory.Stub(factory => factory.GetErrorForException(null)).IgnoreArguments().Return(genericError);
+            _errorFactory.Stub(factory => factory.GetErrorForException(null)).IgnoreArguments().Return(_genericError);
         }
 
         [TearDown]
         public void Teardown()
         {
-            otpAlgorithm.VerifyAllExpectations();
-            movingFactorAlgorithm.VerifyAllExpectations();
+            _otpAlgorithm.VerifyAllExpectations();
+            _movingFactorAlgorithm.VerifyAllExpectations();
         }
 
-        private IOTPService otpService;
-        private IOTPAlgorithm otpAlgorithm;
-        private IMovingFactorAlgorithm movingFactorAlgorithm;
-        private IErrorFactory errorFactory;
-        private OTPConfiguration otpConfiguration;
-        private OTPError invalidRequestError;
-        private OTPError genericError;
+        private IOTPService _otpService;
+        private IOTPAlgorithm _otpAlgorithm;
+        private IMovingFactorAlgorithm _movingFactorAlgorithm;
+        private IErrorFactory _errorFactory;
+        private OTPConfiguration _otpConfiguration;
+        private OTPError _invalidRequestError;
+        private OTPError _genericError;
 
 
         [Test]
@@ -67,14 +69,14 @@ namespace OneTimePassword.Impl.Tests.UnitTests
             };
 
             var movingFactor = 87302;
-            movingFactorAlgorithm.Expect(algorithm => algorithm.GetMovingFactor()).Return(movingFactor);
-            otpAlgorithm.Expect(
+            _movingFactorAlgorithm.Expect(algorithm => algorithm.GetMovingFactor()).Return(movingFactor);
+            _otpAlgorithm.Expect(
                 algorithm =>
-                    algorithm.GenerateOTP(userId, otpConfiguration.PrivateKey, movingFactor,
-                        otpConfiguration.NumberOfDigitsInOTP)).Return(generatedOtp);
+                    algorithm.GenerateOTP(userId, _otpConfiguration.PrivateKey, movingFactor,
+                        _otpConfiguration.NumberOfDigitsInOTP)).Return(generatedOtp);
 
 
-            var generateOTPResponse = otpService.GenerateOtp(generateOtpRequest);
+            var generateOTPResponse = _otpService.GenerateOtp(generateOtpRequest);
             Assert.That(generateOTPResponse, Is.Not.Null);
             Assert.That(generateOTPResponse.UserId, Is.EqualTo(userId));
             Assert.That(generateOTPResponse.OTP, Is.EqualTo(generatedOtp));
@@ -93,16 +95,16 @@ namespace OneTimePassword.Impl.Tests.UnitTests
             };
 
             var movingFactor = 87302;
-            movingFactorAlgorithm.Expect(algorithm => algorithm.GetMovingFactorForValidation()).Return(new List<long>()
+            _movingFactorAlgorithm.Expect(algorithm => algorithm.GetMovingFactorForValidation()).Return(new List<long>()
             {
                 movingFactor
             });
-            otpAlgorithm.Expect(
+            _otpAlgorithm.Expect(
                 algorithm =>
-                    algorithm.GenerateOTP(userId, otpConfiguration.PrivateKey, movingFactor,
-                        otpConfiguration.NumberOfDigitsInOTP)).Return(generatedOtp);
+                    algorithm.GenerateOTP(userId, _otpConfiguration.PrivateKey, movingFactor,
+                        _otpConfiguration.NumberOfDigitsInOTP)).Return(generatedOtp);
 
-            var validateOTPResponse = otpService.ValidateOtp(validateOTPRequest);
+            var validateOTPResponse = _otpService.ValidateOtp(validateOTPRequest);
             Assert.That(validateOTPResponse, Is.Not.Null);
             Assert.That(validateOTPResponse.UserId, Is.EqualTo(userId));
             Assert.That(validateOTPResponse.Success, Is.True);
@@ -121,16 +123,16 @@ namespace OneTimePassword.Impl.Tests.UnitTests
             };
 
             var movingFactor = 87305;
-            movingFactorAlgorithm.Expect(algorithm => algorithm.GetMovingFactorForValidation()).Return(new List<long>()
+            _movingFactorAlgorithm.Expect(algorithm => algorithm.GetMovingFactorForValidation()).Return(new List<long>()
             {
                 movingFactor
             });
-            otpAlgorithm.Expect(
+            _otpAlgorithm.Expect(
                 algorithm =>
-                    algorithm.GenerateOTP(userId, otpConfiguration.PrivateKey, movingFactor,
-                        otpConfiguration.NumberOfDigitsInOTP)).Return("809012");
+                    algorithm.GenerateOTP(userId, _otpConfiguration.PrivateKey, movingFactor,
+                        _otpConfiguration.NumberOfDigitsInOTP)).Return("809012");
 
-            var validateOTPResponse = otpService.ValidateOtp(validateOTPRequest);
+            var validateOTPResponse = _otpService.ValidateOtp(validateOTPRequest);
             Assert.That(validateOTPResponse, Is.Not.Null);
             Assert.That(validateOTPResponse.UserId, Is.EqualTo(userId));
             Assert.That(validateOTPResponse.Success, Is.False);
@@ -150,21 +152,21 @@ namespace OneTimePassword.Impl.Tests.UnitTests
 
             var movingFactorOne = 87302;
             var movingFactorTwo = 87303;
-            movingFactorAlgorithm.Expect(algorithm => algorithm.GetMovingFactorForValidation()).Return(new List<long>()
+            _movingFactorAlgorithm.Expect(algorithm => algorithm.GetMovingFactorForValidation()).Return(new List<long>()
             {
                 movingFactorOne,
                 movingFactorTwo
             });
-            otpAlgorithm.Expect(
+            _otpAlgorithm.Expect(
                 algorithm =>
-                    algorithm.GenerateOTP(userId, otpConfiguration.PrivateKey, movingFactorOne,
-                        otpConfiguration.NumberOfDigitsInOTP)).Return("809012");
-            otpAlgorithm.Expect(
+                    algorithm.GenerateOTP(userId, _otpConfiguration.PrivateKey, movingFactorOne,
+                        _otpConfiguration.NumberOfDigitsInOTP)).Return("809012");
+            _otpAlgorithm.Expect(
                 algorithm =>
-                    algorithm.GenerateOTP(userId, otpConfiguration.PrivateKey, movingFactorTwo,
-                        otpConfiguration.NumberOfDigitsInOTP)).Return(generatedOtp);
+                    algorithm.GenerateOTP(userId, _otpConfiguration.PrivateKey, movingFactorTwo,
+                        _otpConfiguration.NumberOfDigitsInOTP)).Return(generatedOtp);
 
-            var validateOTPResponse = otpService.ValidateOtp(validateOTPRequest);
+            var validateOTPResponse = _otpService.ValidateOtp(validateOTPRequest);
             Assert.That(validateOTPResponse, Is.Not.Null);
             Assert.That(validateOTPResponse.UserId, Is.EqualTo(userId));
             Assert.That(validateOTPResponse.Success, Is.True);
@@ -173,21 +175,21 @@ namespace OneTimePassword.Impl.Tests.UnitTests
         [Test]
         public void ShouldReturnErrorForInvalidGenerateOTPRequest()
         {
-            var generateOTPResponse = otpService.GenerateOtp(new GenerateOTPRequest());
+            var generateOTPResponse = _otpService.GenerateOtp(new GenerateOTPRequest());
             Assert.That(generateOTPResponse, Is.Not.Null);
             Assert.That(generateOTPResponse.UserId, Is.Null);
             Assert.That(generateOTPResponse.OTP, Is.Null);
-            Assert.That(generateOTPResponse.Error, Is.EqualTo(invalidRequestError));
+            Assert.That(generateOTPResponse.Error, Is.EqualTo(_invalidRequestError));
         }
 
         [Test]
         public void ShouldReturnErrorForInvalidValidateOTPRequest()
         {
-            var validateOTPResponse = otpService.ValidateOtp(new ValidateOTPRequest());
+            var validateOTPResponse = _otpService.ValidateOtp(new ValidateOTPRequest());
             Assert.That(validateOTPResponse, Is.Not.Null);
             Assert.That(validateOTPResponse.UserId, Is.Null);
             Assert.That(validateOTPResponse.Success, Is.False);
-            Assert.That(validateOTPResponse.Error, Is.EqualTo(invalidRequestError));
+            Assert.That(validateOTPResponse.Error, Is.EqualTo(_invalidRequestError));
         }
 
         [Test]
@@ -203,18 +205,18 @@ namespace OneTimePassword.Impl.Tests.UnitTests
             };
 
             var movingFactor = 87302;
-            movingFactorAlgorithm.Expect(algorithm => algorithm.GetMovingFactorForValidation())
+            _movingFactorAlgorithm.Expect(algorithm => algorithm.GetMovingFactorForValidation())
                 .Return(new List<long>() {movingFactor});
-            otpAlgorithm.Expect(algorithm =>
-                algorithm.GenerateOTP(userId, otpConfiguration.PrivateKey, movingFactor,
-                    otpConfiguration.NumberOfDigitsInOTP))
+            _otpAlgorithm.Expect(algorithm =>
+                algorithm.GenerateOTP(userId, _otpConfiguration.PrivateKey, movingFactor,
+                    _otpConfiguration.NumberOfDigitsInOTP))
                 .Throw(new ArgumentOutOfRangeException(nameof(userId)));
 
-            var validateOTPResponse = otpService.ValidateOtp(validateOTPRequest);
+            var validateOTPResponse = _otpService.ValidateOtp(validateOTPRequest);
             Assert.That(validateOTPResponse, Is.Not.Null);
             Assert.That(validateOTPResponse.UserId, Is.Null);
             Assert.That(validateOTPResponse.Success, Is.False);
-            Assert.That(validateOTPResponse.Error, Is.EqualTo(genericError));
+            Assert.That(validateOTPResponse.Error, Is.EqualTo(_genericError));
         }
 
         [Test]
@@ -228,17 +230,17 @@ namespace OneTimePassword.Impl.Tests.UnitTests
             };
 
             var movingFactor = 87302;
-            movingFactorAlgorithm.Expect(algorithm => algorithm.GetMovingFactor()).Return(movingFactor);
-            otpAlgorithm.Expect(algorithm =>
-                algorithm.GenerateOTP(userId, otpConfiguration.PrivateKey, movingFactor,
-                    otpConfiguration.NumberOfDigitsInOTP))
+            _movingFactorAlgorithm.Expect(algorithm => algorithm.GetMovingFactor()).Return(movingFactor);
+            _otpAlgorithm.Expect(algorithm =>
+                algorithm.GenerateOTP(userId, _otpConfiguration.PrivateKey, movingFactor,
+                    _otpConfiguration.NumberOfDigitsInOTP))
                 .Throw(new ArgumentOutOfRangeException(nameof(userId)));
 
-            var generateOTPResponse = otpService.GenerateOtp(generateOtpRequest);
+            var generateOTPResponse = _otpService.GenerateOtp(generateOtpRequest);
             Assert.That(generateOTPResponse, Is.Not.Null);
             Assert.That(generateOTPResponse.UserId, Is.Null);
             Assert.That(generateOTPResponse.OTP, Is.Null);
-            Assert.That(generateOTPResponse.Error, Is.EqualTo(genericError));
+            Assert.That(generateOTPResponse.Error, Is.EqualTo(_genericError));
         }
     }
 }

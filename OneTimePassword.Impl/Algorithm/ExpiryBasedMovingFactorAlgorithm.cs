@@ -1,38 +1,38 @@
 using System;
 using System.Collections.Generic;
 
-namespace OneTimePassword.Impl
+namespace OneTimePassword.Impl.Algorithm
 {
     public class ExpiryBasedMovingFactorAlgorithm : IMovingFactorAlgorithm
     {
-        private readonly OTPConfiguration otpConfiguration;
-        private readonly Func<DateTime> currentTimeFunction;
+        private readonly OTPConfiguration _otpConfiguration;
+        private readonly Func<DateTime> _currentTimeFunction;
 
         public ExpiryBasedMovingFactorAlgorithm(OTPConfiguration otpConfiguration,
             Func<DateTime> currentTimeFunction = null)
         {
-            this.currentTimeFunction = currentTimeFunction ?? (() => DateTime.Now);
-            this.otpConfiguration = otpConfiguration;
+            this._currentTimeFunction = currentTimeFunction ?? (() => DateTime.Now);
+            this._otpConfiguration = otpConfiguration;
         }
 
         public long GetMovingFactor()
         {
-            var dateTime = currentTimeFunction();
+            var dateTime = _currentTimeFunction();
             TimeSpan ts = GetEphocTimeSpan(dateTime);
             var totalSeconds = (long) ts.TotalSeconds;
-            return totalSeconds/otpConfiguration.OTPExpiryInSeconds;
+            return totalSeconds/_otpConfiguration.OTPExpiryInSeconds;
         }
 
         public List<long> GetMovingFactorForValidation()
         {
-            var currentTime = currentTimeFunction();
+            var currentTime = _currentTimeFunction();
             var result = new List<long>();
             for (int i = -1; i <= 0; i++)
             {
-                var movingFactorDateTime = currentTime.AddSeconds(otpConfiguration.OTPExpiryInSeconds*i);
+                var movingFactorDateTime = currentTime.AddSeconds(_otpConfiguration.OTPExpiryInSeconds*i);
                 TimeSpan ts = GetEphocTimeSpan(movingFactorDateTime);
                 var totalSeconds = (long) ts.TotalSeconds;
-                var movingFactorForValidation = totalSeconds/otpConfiguration.OTPExpiryInSeconds;
+                var movingFactorForValidation = totalSeconds/_otpConfiguration.OTPExpiryInSeconds;
                 result.Add(movingFactorForValidation);
             }
             return result;

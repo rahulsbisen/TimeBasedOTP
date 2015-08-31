@@ -6,6 +6,8 @@ using Nancy;
 using Nancy.TinyIoc;
 using OneTimePassword.Contract;
 using OneTimePassword.Impl;
+using OneTimePassword.Impl.Algorithm;
+using OneTimePassword.Impl.Error;
 
 namespace OneTimePassword.Web.Bootstrap
 {

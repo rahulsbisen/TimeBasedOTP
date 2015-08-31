@@ -6,13 +6,13 @@ namespace OneTimePassword.Web.Tests.Framework
 {
     public abstract class NancyTestBase
     {
-        protected Browser browser;
+        protected Browser Browser;
 
         [SetUp]
         public void Setup()
         {
             var bootstrapper = new Bootstrapper();
-            browser = new Browser(bootstrapper);
+            Browser = new Browser(bootstrapper);
         }
     }
 }

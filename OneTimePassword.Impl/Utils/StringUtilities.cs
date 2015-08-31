@@ -1,4 +1,4 @@
-namespace OneTimePassword.Impl
+namespace OneTimePassword.Impl.Utils
 {
     public static class StringUtilities
     {

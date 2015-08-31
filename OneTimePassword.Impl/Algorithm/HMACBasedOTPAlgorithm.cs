@@ -2,7 +2,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace OneTimePassword.Impl
+namespace OneTimePassword.Impl.Algorithm
 {
     public class HmacBasedOTPAlgorithm : IOTPAlgorithm
     {

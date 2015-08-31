@@ -4,6 +4,8 @@ using NUnit.Framework;
 using OneTimePassword.Contract.Request;
 using OneTimePassword.Contract.Response;
 using OneTimePassword.Impl;
+using OneTimePassword.Impl.Algorithm;
+using OneTimePassword.Impl.Error;
 using OneTimePassword.Web.Tests.Framework;
 
 namespace OneTimePassword.Web.Tests.Modules
@@ -14,7 +16,7 @@ namespace OneTimePassword.Web.Tests.Modules
         [Test]
         public void ValidatePageShouldHaveValidationForm()
         {
-            var browserResponse = browser.Get("/Validate", context => { context.HttpRequest(); });
+            var browserResponse = Browser.Get("/Validate", context => { context.HttpRequest(); });
 
             Assert.That(browserResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK), browserResponse.Body.AsString());
             browserResponse.Body["form"].ShouldExist();
@@ -30,7 +32,7 @@ namespace OneTimePassword.Web.Tests.Modules
             var userId = "random_user";
             string otp = GetValidOTP(userId);
 
-            var browserResponse = browser.Post("/Validate", context =>
+            var browserResponse = Browser.Post("/Validate", context =>
             {
                 context.FormValue("userId", userId);
                 context.FormValue("otp", otp);
@@ -53,7 +55,7 @@ namespace OneTimePassword.Web.Tests.Modules
             var userId = "random_user";
             string otp = "123456";
 
-            var browserResponse = browser.Post("/Validate", context =>
+            var browserResponse = Browser.Post("/Validate", context =>
             {
                 context.FormValue("userId", userId);
                 context.FormValue("otp", otp);

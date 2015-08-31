@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace OneTimePassword.Impl
+namespace OneTimePassword.Impl.Algorithm
 {
     public interface IMovingFactorAlgorithm
     {
