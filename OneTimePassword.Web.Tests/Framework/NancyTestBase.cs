@@ -11,7 +11,7 @@ namespace OneTimePassword.Web.Tests.Framework
         [SetUp]
         public void Setup()
         {
-            var bootstrapper = new Bootstrapper();
+            var bootstrapper = new OTPBootstrapper();
             Browser = new Browser(bootstrapper);
         }
     }
