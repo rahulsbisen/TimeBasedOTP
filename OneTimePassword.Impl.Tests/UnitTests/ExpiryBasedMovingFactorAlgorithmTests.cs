@@ -34,7 +34,7 @@ namespace OneTimePassword.Impl.Tests.UnitTests
         private IMovingFactorAlgorithm _expiryBasedMovingFactorAlgorithm;
 
         [Test]
-        public void ShouldGenerateDifferentMovingFactorOutsideTimeInterval()
+        public void ShouldGenerateDifferentMovingFactorOutsideExpiryTimeInterval()
         {
             var dateTime = new DateTime(2015, 08, 29, 09, 00, 00);
             var dateTimePlus31Seconds = dateTime.AddSeconds(30);
@@ -48,7 +48,7 @@ namespace OneTimePassword.Impl.Tests.UnitTests
         }
 
         [Test]
-        public void ShouldGenerateSameMovingFactorWithinTimeInterval()
+        public void ShouldGenerateSameMovingFactorWithinExpiryTimeInterval()
         {
             var dateTime = new DateTime(2015, 08, 29, 09, 00, 00);
             var dateTimePlus10Seconds = dateTime.AddSeconds(10);
@@ -62,7 +62,7 @@ namespace OneTimePassword.Impl.Tests.UnitTests
         }
 
         [Test]
-        public void ShouldGetMovingFactorForValidationWhichContainsOriginalMovingFactor()
+        public void ShouldGetMovingFactorForValidationWhichContainsOriginalMovingFactorIfTimeHasNotExpired()
         {
             var dateTime = new DateTime(2015, 08, 29, 09, 00, 29);
             var dateTimePlus10Seconds = dateTime.AddSeconds(10);

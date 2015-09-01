@@ -4,7 +4,7 @@ using OneTimePassword.Impl.Error;
 
 namespace OneTimePassword.Impl.Tests.UnitTests
 {
-    [TestFixture]
+    [TestFixture(Category = "UnitTests")]
     public class ErrorFactoryTests
     {
         [Test]

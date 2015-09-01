@@ -5,7 +5,7 @@ using OneTimePassword.Web.Tests.Framework;
 
 namespace OneTimePassword.Web.Tests.Modules
 {
-    [TestFixture]
+    [TestFixture(Category = "WebTest")]
     public class HomeModuleTest : NancyTestBase
     {
         [Test]
